@@ -10,9 +10,25 @@ print("--- Start")
 
 n = NiryoOne()
 
+def calibrate_robot():
+    retry_count = 5
+    while retry_count > 0:
+        try:
+            print("Calibrating robot...")
+            n.calibrate_auto(timeout=30)  # Increase timeout to 30 seconds
+            print("Calibration finished!\n")
+            return True
+        except NiryoOneException as e:
+            print("Error during calibration: {}".format(e))
+            retry_count -= 1
+            time.sleep(2)
+    return False
+
 try:
     # Calibrate robot first
-    print("Calibration finished!\n")
+    if not calibrate_robot():
+        print("Failed to calibrate robot after multiple attempts.")
+        exit(1)
 
     time.sleep(1)
 
