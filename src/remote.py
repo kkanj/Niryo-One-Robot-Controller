@@ -18,7 +18,7 @@ def calibrate_robot():
         n.calibrate_auto()
         print("Calibration finished!")
     except NiryoOneException as e:
-        print(f"Error during calibration: {e}")
+        print("Error during calibration: {}".format(e))
 
 # Movement functions
 def move_joint(index, delta):
@@ -27,7 +27,7 @@ def move_joint(index, delta):
         joints[index] += delta
         n.move_joints(joints)
     except NiryoOneException as e:
-        print(f"Error during joint movement: {e}")
+        print("Error during joint movement: {}".format(e))
 
 def move_pose(dx=0, dy=0, dz=0, droll=0, dpitch=0, dyaw=0):
     try:
@@ -42,7 +42,7 @@ def move_pose(dx=0, dy=0, dz=0, droll=0, dpitch=0, dyaw=0):
         ]
         n.move_pose(*new_pose)
     except NiryoOneException as e:
-        print(f"Error during pose movement: {e}")
+        print("Error during pose movement: {}".format(e))
 
 def handle_input():
     print("Remote control activated. Use WASDQE keys for movement, X to exit.")
@@ -58,15 +58,6 @@ def handle_input():
             move_pose(dx=-0.01)
         elif key == 'd':
             move_pose(dx=0.01)
-        elif key == 'q':
-            move_pose(dy=0.01)
-        elif key == 'e':
-            move_pose(dy=-0.01)
-        elif key == 'x':
-            print("Exiting remote control.")
-            break
-        else:
-            print("Invalid key. Use WASDQE for movement, X to exit.")
 
 def main():
     try:
