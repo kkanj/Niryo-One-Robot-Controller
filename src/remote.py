@@ -2,9 +2,7 @@
 
 from niryo_one_python_api.niryo_one_api import *
 import rospy
-import math
-import threading
-import sys
+import time
 
 # Initialize ROS node
 rospy.init_node('niryo_one_remote_control')
@@ -66,8 +64,18 @@ def main():
     except KeyboardInterrupt:
         print("\nRemote control terminated by user.")
     finally:
-        n.activate_learning_mode(True)
-        print("Robot set to learning mode.")
+        retry_count = 5
+        while retry_count > 0:
+            try:
+                n.activate_learning_mode(True)
+                print("Robot set to learning mode.")
+                break
+            except NiryoOneException as e:
+                print("Error setting learning mode: {}".format(e))
+                retry_count -= 1
+                time.sleep(2)
+        if retry_count == 0:
+            print("Failed to set robot to learning mode after multiple attempts.")
 
 if __name__ == "__main__":
     main()
