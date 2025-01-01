@@ -12,7 +12,7 @@ n = NiryoOne()
 
 try:
     # Calibrate robot first
-    n.calibrate_auto()
+    
     print("Calibration finished!\n")
 
     time.sleep(1)
