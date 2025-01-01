@@ -31,12 +31,12 @@ def move_pose(dx=0, dy=0, dz=0, droll=0, dpitch=0, dyaw=0):
     try:
         pose = n.get_arm_pose()
         new_pose = [
-            pose[0] + dx,
-            pose[1] + dy,
-            pose[2] + dz,
-            pose[3] + droll,
-            pose[4] + dpitch,
-            pose[5] + dyaw,
+            pose.position.x + dx,
+            pose.position.y + dy,
+            pose.position.z + dz,
+            pose.rpy.roll + droll,
+            pose.rpy.pitch + dpitch,
+            pose.rpy.yaw + dyaw,
         ]
         n.move_pose(*new_pose)
     except NiryoOneException as e:
@@ -56,6 +56,12 @@ def handle_input():
             move_pose(dx=-0.01)
         elif key == 'd':
             move_pose(dx=0.01)
+        elif key == 'q':
+            move_pose(dy=-0.01)
+        elif key == 'e':
+            move_pose(dy=0.01)
+        elif key == 'x':
+            break
 
 def main():
     try:
