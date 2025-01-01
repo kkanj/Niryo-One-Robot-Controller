@@ -39,7 +39,8 @@ def move_pose(dx=0, dy=0, dz=0, droll=0, dpitch=0, dyaw=0):
             pose.rpy.pitch + dpitch,
             pose.rpy.yaw + dyaw,
         ]
-        n.move_pose(*new_pose)
+        if not n.is_busy():
+            n.move_pose(*new_pose)
     except NiryoOneException as e:
         print("Error during pose movement: {}".format(e))
 
