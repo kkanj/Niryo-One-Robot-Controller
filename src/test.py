@@ -12,10 +12,14 @@ n = NiryoOne()
 
 try:
     # Calibrate robot first
-    
+    n.calibrate_auto()
     print("Calibration finished!\n")
 
     time.sleep(1)
+
+    # Deactivate learning mode
+    n.activate_learning_mode(False)
+    print("Learning mode deactivated")
 
     # Move up
     n.move_pose(0, 0, 0.1, 0, 0, 0)  # Move up by 0.1 meters
