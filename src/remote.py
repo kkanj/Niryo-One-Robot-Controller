@@ -49,7 +49,7 @@ def handle_input():
     print("W/S: Move up/down\nA/D: Move left/right\nQ/E: Move forward/backward\n")
 
     while True:
-        key = input("Command: ").lower()
+        key = raw_input("Command: ").lower()
         if key == 'w':
             move_pose(dz=0.01)
         elif key == 's':
