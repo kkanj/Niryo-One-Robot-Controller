@@ -3,6 +3,7 @@
 from niryo_one_python_api.niryo_one_api import *
 import rospy
 import time
+import curses
 
 # Initialize ROS node
 rospy.init_node('niryo_one_remote_control')
@@ -42,31 +43,34 @@ def move_pose(dx=0, dy=0, dz=0, droll=0, dpitch=0, dyaw=0):
     except NiryoOneException as e:
         print("Error during pose movement: {}".format(e))
 
-def handle_input():
-    print("Remote control activated. Use WASDQE keys for movement, X to exit.")
-    print("W/S: Move up/down\nA/D: Move left/right\nQ/E: Move forward/backward\n")
+def handle_input(stdscr):
+    stdscr.nodelay(True)
+    stdscr.clear()
+    stdscr.addstr("Remote control activated. Use WASDQE keys for movement, X to exit.\n")
+    stdscr.addstr("W/S: Move up/down\nA/D: Move left/right\nQ/E: Move forward/backward\n")
 
     while True:
-        key = raw_input("Command: ").lower()
-        if key == 'w':
+        key = stdscr.getch()
+        if key == ord('w'):
             move_pose(dz=0.01)
-        elif key == 's':
+        elif key == ord('s'):
             move_pose(dz=-0.01)
-        elif key == 'a':
+        elif key == ord('a'):
             move_pose(dx=-0.01)
-        elif key == 'd':
+        elif key == ord('d'):
             move_pose(dx=0.01)
-        elif key == 'q':
+        elif key == ord('q'):
             move_pose(dy=-0.01)
-        elif key == 'e':
+        elif key == ord('e'):
             move_pose(dy=0.01)
-        elif key == 'x':
+        elif key == ord('x'):
             break
+        time.sleep(0.1)  # Add a small delay to prevent excessive CPU usage
 
 def main():
     try:
         calibrate_robot()
-        handle_input()
+        curses.wrapper(handle_input)
     except KeyboardInterrupt:
         print("\nRemote control terminated by user.")
     finally:
