@@ -44,15 +44,22 @@ def move_pose(dx=0, dy=0, dz=0, droll=0, dpitch=0, dyaw=0):
         print("Error during pose movement: {}".format(e))
 
 def handle_input(stdscr):
-    stdscr.nodelay(True)
+    stdscr.nodelay(False)
     stdscr.clear()
-    stdscr.addstr("Remote control activated. Use WASDQE keys for movement, X to exit.\n")
-    stdscr.addstr("W/S: Move up/down\nA/D: Move left/right\nQ/E: Move forward/backward\n")
+    stdscr.addstr("Hold keys (W/S/A/D/Q/E) to move continuously. Press X to exit.\n")
 
     while True:
         key = stdscr.getch()
-        if key == ord('w'):
-            move_pose(dz=0.01)
+        if key == ord('x'):
+            break
+        elif key == ord('w'):
+            while True:
+                move_pose(dz=0.001)
+                time.sleep(0.01)
+                nxt = stdscr.getch()
+                if nxt != ord('w'):
+                    curses.ungetch(nxt)
+                    break
         elif key == ord('s'):
             move_pose(dz=-0.01)
         elif key == ord('a'):
