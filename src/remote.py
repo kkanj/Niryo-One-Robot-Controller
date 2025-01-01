@@ -30,6 +30,7 @@ def move_joint(index, delta):
 
 def move_pose(dx=0, dy=0, dz=0, droll=0, dpitch=0, dyaw=0):
     try:
+        n.wait_for_server()
         pose = n.get_arm_pose()
         new_pose = [
             pose.position.x + dx,
@@ -49,22 +50,29 @@ def handle_input(stdscr):
     stdscr.addstr("Remote control activated. Use WASDQE keys for movement, X to exit.\n")
     stdscr.addstr("W/S: Move up/down\nA/D: Move left/right\nQ/E: Move forward/backward\n")
 
+    key = None
     while True:
-        key = stdscr.getch()
+        new_key = stdscr.getch()
+        if new_key != -1:
+            key = new_key
+
         if key == ord('w'):
-            move_pose(dz=0.01)
+            move_pose(dz=0.05)
         elif key == ord('s'):
-            move_pose(dz=-0.01)
+            move_pose(dz=-0.05)
         elif key == ord('a'):
-            move_pose(dx=-0.01)
+            move_pose(dx=-0.05)
         elif key == ord('d'):
-            move_pose(dx=0.01)
+            move_pose(dx=0.05)
         elif key == ord('q'):
-            move_pose(dy=-0.01)
+            move_pose(dy=-0.05)
         elif key == ord('e'):
-            move_pose(dy=0.01)
+            move_pose(dy=0.05)
         elif key == ord('x'):
             break
+        else:
+            key = None  # Stop movement if no key is pressed
+
         time.sleep(0.1)  # Add a small delay to prevent excessive CPU usage
 
 def main():
